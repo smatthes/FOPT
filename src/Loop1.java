@@ -7,16 +7,16 @@ public class Loop1 {
         return ++counter;
     }
 
-    public static void run(String name) {
+    public static void run() {
         for (int i = 1; i <= 100; i++) {
-            System.out.println(getIncrementedCounter() + ": " + name + " (" + i + ")");
+            System.out.println(getIncrementedCounter() + ": " + Thread.currentThread().getName() + " (" + i + ")");
         }
     }
 
     public static void main(String[] args) {
-        new Thread(() -> run("Thread 1")).start();
-        new Thread(() -> run("Thread 2")).start();
-        new Thread(() -> run("Thread 3")).start();
+        new Thread(() -> run()).start();
+        new Thread(() -> run()).start();
+        new Thread(() -> run()).start();
     }
 
 }
