@@ -1,41 +1,36 @@
 
 public class StopThread extends Thread {
-    
-    private boolean stopped = false;
-    
+
     public StopThread() {
         start();
     }
-    
-    public synchronized void stopThread() {
-        stopped = true;
-    }
-    
-    public synchronized boolean isStopped() {
-        return stopped;
-    }
-    
+
     public void run() {
         int i = 0;
-        
-        while(!isStopped()) {
-            i++;
-            System.out.println("Hallo Welt (" + i + ")");
+
+        try {
+            while (!isInterrupted()) {
+                i++;
+                System.out.println("Hallo Welt (" + i + ")");
+                Thread.sleep(3_000);
+            }                       
+        } catch (InterruptedException ex) {
+            System.err.println(ex.getLocalizedMessage());
         }
+        
         System.out.println("Thread endet jetzt ...");
     }
 
     public static void main(String[] args) {
         StopThread st = new StopThread();
-        
+
         try {
-            Thread.sleep(5000);
+            Thread.sleep(9_100);
+        } catch (InterruptedException ex) {
+            // System.err.println(ex.getLocalizedMessage());
         }
-        catch(InterruptedException ex) {
-            System.err.println(ex.getLocalizedMessage());
-        }
-        
-        st.stopThread();
+
+        st.interrupt();
     }
 
 }
