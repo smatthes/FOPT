@@ -22,6 +22,13 @@ class Service implements Runnable {
             if(array[i]) {
                 result++;
             }
+            
+            try {
+                Thread.sleep(10);
+            }
+            catch(InterruptedException ex) {
+                System.err.println(ex.getLocalizedMessage());
+            }
         }
     }
 

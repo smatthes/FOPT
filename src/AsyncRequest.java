@@ -1,8 +1,8 @@
 public class AsyncRequest {
     
-    private static final int ARRAY_SIZE = 1_000_000_000;
+    private static final int ARRAY_SIZE = 10_000;
     
-    private static final int NUMBER_OF_SERVERS = 20;
+    private static final int NUMBER_OF_SERVERS = 1000;
 
     public static void main(String[] args) {
         // Erzeuge Feld mit jedem 10. Wert true
