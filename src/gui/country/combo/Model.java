@@ -19,4 +19,8 @@ public class Model {
         return countries;
     }
 
+    public boolean removeCountry(Country country) {
+        return countries.remove(country);
+    }
+
 }

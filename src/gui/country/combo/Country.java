@@ -34,7 +34,7 @@ public class Country {
     }
 
     public long getDensity() {
-        return people / area;
+        return Math.round((float) people / area);
     }
 
     public String toString() {

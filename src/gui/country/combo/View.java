@@ -1,6 +1,11 @@
 package gui.country.combo;
 
+import java.util.Objects;
+
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.value.ChangeListener;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
@@ -8,6 +13,8 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -61,12 +68,13 @@ public class View {
 
         cmbCountries.setId("countrySelector");
         cmbCountries.setPromptText("Keine Länder vorhanden");
-        cmbCountries.getSelectionModel().selectFirst();
-        cmbCountries.setEditable(false);
+        cmbCountries.valueProperty().addListener(countryListener());
+        cmbCountries.setEditable(false);        
         root.getChildren().add(cmbCountries);
 
         cbExactValues.setId("exactValues");
         cbExactValues.setSelected(true);
+        cbExactValues.setOnAction (e -> updateLabels(cmbCountries.getValue()));
         root.getChildren().add(cbExactValues);
 
         GridPane dataPane = new GridPane();
@@ -91,35 +99,68 @@ public class View {
         root.getChildren().add(dataPane);
 
         HBox inputPane = new HBox(10);
+        txtCountryName.setId("countryField");
+        txtCountryName.setPromptText("Land");        
+        // txtCountryName.setOnKeyReleased(e -> handleKeyboardEnter(e));
         inputPane.getChildren().add(txtCountryName);
+        
+        txtCapital.setId("capitalField");
+        txtCapital.setPromptText("Hauptstadt");        
+        // txtCapital.setOnKeyReleased(e -> handleKeyboardEnter(e));        
         inputPane.getChildren().add(txtCapital);
+        
+        txtPeople.setId("populationField");
+        txtPeople.setPromptText("Einwohner");        
+        // txtPeople.setOnKeyReleased(e -> handleKeyboardEnter(e));
         inputPane.getChildren().add(txtPeople);
+        
+        txtArea.setId("areaField");
+        txtArea.setPromptText("Fläche");
+        // txtArea.setOnKeyReleased(e -> handleKeyboardEnter(e));
         inputPane.getChildren().add(txtArea);
 
         btnAdd.setId("add");
         btnAdd.setOnAction(e -> addCountry());
-
+        btnAdd.setOnKeyReleased(e -> handleKeyboardEnter(e));
         inputPane.getChildren().add(btnAdd);
         root.getChildren().add(inputPane);
 
         btnDelete.setId("delete");
-        root.getChildren().add(btnDelete);
+        btnDelete.setOnAction(e -> deleteCountry());
+        // btnDelete.disableProperty().bind(Bindings.isEmpty(cmbCountries.getItems()));
+        
+        root.getChildren().add(btnDelete);        
 
-        emptyTextFields();
+        clearTextFields();
     }
 
-    public void emptyLabel() {
+    private void handleKeyboardEnter(KeyEvent e) {
+        if(e.getCode() == KeyCode.ENTER) {
+            addCountry();
+        }
+    }
+
+    private ChangeListener<? super Country> countryListener() {
+        return (observable, prevSelectedCountry, selectedCountry) -> {
+            if(Objects.nonNull(selectedCountry)) {
+                updateLabels(selectedCountry);
+            }
+        };
+    }
+
+    public void clearLabels() {
         lblCountry.setText("");
         lblCapital.setText("");
         lblPeople.setText("");
         lblArea.setText("");
+        lblDensity.setText("");
     }
 
-    public void emptyTextFields() {
-        txtCountryName.setText("Land");
-        txtCapital.setText("Hauptstadt");
-        txtPeople.setText("Einwohner");
-        txtArea.setText("Fläche");
+    public void clearTextFields() {
+        txtCountryName.clear();
+        txtCapital.clear();
+        txtPeople.clear();
+        txtArea.clear();
     }
 
     public ObjectProperty<ObservableList<Country>> countriesProperty() {
@@ -128,9 +169,42 @@ public class View {
 
     private void addCountry() {
         if (presenter.addCountry(txtCountryName.getText(), txtCapital.getText(), txtPeople.getText(), txtArea.getText())) {
-            emptyTextFields();
-            cmbCountries.getSelectionModel().selectFirst();
+            clearTextFields();
+            cmbCountries.getSelectionModel().selectLast();
+            btnDelete.disableProperty().setValue(false);
         }
+    }
+    
+    private void deleteCountry() {
+        if (presenter.deleteCountry(cmbCountries.getValue())) {
+            clearLabels();
+            clearTextFields();
+            selectFirstCountry();   
+            btnDelete.disableProperty().setValue(cmbCountries.getItems().size() == 0);
+        }
+    }
+    
+    private String numberFormatter(long number) {
+        if(!cbExactValues.isSelected()) {
+            if(number > 1_000_000) {
+                return String.format("%d Mill.", Math.round(number / 1_000_000f));
+            } else if(number > 1_000) {
+                return String.format("%,d.000", Math.round(number / 1_000f));
+            }
+        }
+        return String.format("%,d", number);
+    }
+    
+    public void selectFirstCountry() {
+        cmbCountries.getSelectionModel().selectFirst();
+    }
+    
+    private void updateLabels(Country country) {
+        lblCountry.setText(country.getName());
+        lblCapital.setText(country.getCapital());
+        lblPeople.setText(numberFormatter(country.getPeople()));
+        lblArea.setText(numberFormatter(country.getArea()));
+        lblDensity.setText(numberFormatter(country.getDensity()));
     }
 
 }

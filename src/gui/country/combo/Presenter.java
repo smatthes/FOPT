@@ -13,20 +13,29 @@ public class Presenter {
 
     public void init() {
         view.countriesProperty().bind(model.countryProperty());
+        if(model.countryProperty().size() > 0) {
+            view.selectFirstCountry();
+        }
     }
 
     public boolean addCountry(String country, String capital, String peopleString, String areaString) {
         boolean result = false;
 
-        try {
-            long people = Long.parseUnsignedLong(peopleString);
-            long area = Long.parseUnsignedLong(areaString);
-            result = model.addCountry(new Country(country, capital, people, area));
-        } catch (NumberFormatException ex) {
-            // TODO: MessageBox öffnen
+        if(!country.trim().isEmpty() && !capital.trim().isEmpty() && !peopleString.isEmpty() && !areaString.isEmpty()) {
+            try {
+                long people = Long.parseUnsignedLong(peopleString);
+                long area = Long.parseUnsignedLong(areaString);
+                result = model.addCountry(new Country(country, capital, people, area));
+            } catch (NumberFormatException ex) {
+                // TODO: MessageBox öffnen
+            }
         }
 
         return result;
+    }
+
+    public boolean deleteCountry(Country value) {
+        return model.removeCountry(value);
     }
 
 }
