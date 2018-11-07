@@ -3,13 +3,13 @@ package gui.country.combo;
 public class Country {
 
     private String name;
-    
+
     private String capital;
-    
+
     private long people;
-    
+
     private long area;
-    
+
     public Country(String name, String capital, long people, long area) {
         this.name = name;
         this.capital = capital;
@@ -32,5 +32,13 @@ public class Country {
     public long getArea() {
         return area;
     }
-    
+
+    public long getDensity() {
+        return people / area;
+    }
+
+    public String toString() {
+        return name;
+    }
+
 }
