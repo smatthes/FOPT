@@ -2,7 +2,6 @@ package gui.country.combo;
 
 import java.util.Objects;
 
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.value.ChangeListener;
@@ -69,12 +68,12 @@ public class View {
         cmbCountries.setId("countrySelector");
         cmbCountries.setPromptText("Keine Länder vorhanden");
         cmbCountries.valueProperty().addListener(countryListener());
-        cmbCountries.setEditable(false);        
+        cmbCountries.setEditable(false);
         root.getChildren().add(cmbCountries);
 
         cbExactValues.setId("exactValues");
         cbExactValues.setSelected(true);
-        cbExactValues.setOnAction (e -> updateLabels(cmbCountries.getValue()));
+        cbExactValues.setOnAction(e -> updateLabels(cmbCountries.getValue()));
         root.getChildren().add(cbExactValues);
 
         GridPane dataPane = new GridPane();
@@ -100,20 +99,20 @@ public class View {
 
         HBox inputPane = new HBox(10);
         txtCountryName.setId("countryField");
-        txtCountryName.setPromptText("Land");        
+        txtCountryName.setPromptText("Land");
         // txtCountryName.setOnKeyReleased(e -> handleKeyboardEnter(e));
         inputPane.getChildren().add(txtCountryName);
-        
+
         txtCapital.setId("capitalField");
-        txtCapital.setPromptText("Hauptstadt");        
-        // txtCapital.setOnKeyReleased(e -> handleKeyboardEnter(e));        
+        txtCapital.setPromptText("Hauptstadt");
+        // txtCapital.setOnKeyReleased(e -> handleKeyboardEnter(e));
         inputPane.getChildren().add(txtCapital);
-        
+
         txtPeople.setId("populationField");
-        txtPeople.setPromptText("Einwohner");        
+        txtPeople.setPromptText("Einwohner");
         // txtPeople.setOnKeyReleased(e -> handleKeyboardEnter(e));
         inputPane.getChildren().add(txtPeople);
-        
+
         txtArea.setId("areaField");
         txtArea.setPromptText("Fläche");
         // txtArea.setOnKeyReleased(e -> handleKeyboardEnter(e));
@@ -128,21 +127,20 @@ public class View {
         btnDelete.setId("delete");
         btnDelete.setOnAction(e -> deleteCountry());
         // btnDelete.disableProperty().bind(Bindings.isEmpty(cmbCountries.getItems()));
-        
-        root.getChildren().add(btnDelete);        
+        root.getChildren().add(btnDelete);
 
         clearTextFields();
     }
 
     private void handleKeyboardEnter(KeyEvent e) {
-        if(e.getCode() == KeyCode.ENTER) {
+        if (e.getCode() == KeyCode.ENTER) {
             addCountry();
         }
     }
 
     private ChangeListener<? super Country> countryListener() {
         return (observable, prevSelectedCountry, selectedCountry) -> {
-            if(Objects.nonNull(selectedCountry)) {
+            if (Objects.nonNull(selectedCountry)) {
                 updateLabels(selectedCountry);
             }
         };
@@ -167,38 +165,40 @@ public class View {
         return cmbCountries.itemsProperty();
     }
 
+    public BooleanProperty removeBtnDisableProperty() {
+        return btnDelete.disableProperty();
+    }
+
     private void addCountry() {
         if (presenter.addCountry(txtCountryName.getText(), txtCapital.getText(), txtPeople.getText(), txtArea.getText())) {
             clearTextFields();
             cmbCountries.getSelectionModel().selectLast();
-            btnDelete.disableProperty().setValue(false);
         }
     }
-    
+
     private void deleteCountry() {
         if (presenter.deleteCountry(cmbCountries.getValue())) {
             clearLabels();
             clearTextFields();
-            selectFirstCountry();   
-            btnDelete.disableProperty().setValue(cmbCountries.getItems().size() == 0);
+            selectFirstCountry();
         }
     }
-    
+
     private String numberFormatter(long number) {
-        if(!cbExactValues.isSelected()) {
-            if(number > 1_000_000) {
+        if (!cbExactValues.isSelected()) {
+            if (number > 1_000_000) {
                 return String.format("%d Mill.", Math.round(number / 1_000_000f));
-            } else if(number > 1_000) {
+            } else if (number > 1_000) {
                 return String.format("%,d.000", Math.round(number / 1_000f));
             }
         }
         return String.format("%,d", number);
     }
-    
+
     public void selectFirstCountry() {
         cmbCountries.getSelectionModel().selectFirst();
     }
-    
+
     private void updateLabels(Country country) {
         lblCountry.setText(country.getName());
         lblCapital.setText(country.getCapital());

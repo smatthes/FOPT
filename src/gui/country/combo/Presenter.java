@@ -1,5 +1,7 @@
 package gui.country.combo;
 
+import javafx.beans.binding.Bindings;
+
 public class Presenter {
 
     private View view;
@@ -13,7 +15,8 @@ public class Presenter {
 
     public void init() {
         view.countriesProperty().bind(model.countryProperty());
-        if(model.countryProperty().size() > 0) {
+        view.removeBtnDisableProperty().bind(Bindings.isEmpty(model.countryProperty()));
+        if (model.countryProperty().size() > 0) {
             view.selectFirstCountry();
         }
     }
@@ -21,7 +24,7 @@ public class Presenter {
     public boolean addCountry(String country, String capital, String peopleString, String areaString) {
         boolean result = false;
 
-        if(!country.trim().isEmpty() && !capital.trim().isEmpty() && !peopleString.isEmpty() && !areaString.isEmpty()) {
+        if (!country.trim().isEmpty() && !capital.trim().isEmpty() && !peopleString.isEmpty() && !areaString.isEmpty()) {
             try {
                 long people = Long.parseUnsignedLong(peopleString);
                 long area = Long.parseUnsignedLong(areaString);
