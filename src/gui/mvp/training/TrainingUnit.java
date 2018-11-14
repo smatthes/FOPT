@@ -29,6 +29,7 @@ public class TrainingUnit {
         return distance * 60 / time;
     }
 
+    @Override
     public String toString() {
         return marker;
     }
