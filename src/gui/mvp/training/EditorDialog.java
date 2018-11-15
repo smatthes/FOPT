@@ -34,11 +34,11 @@ public class EditorDialog extends Stage {
 
     private void initView() {
         VBox content = new VBox(20);
-        content.setPadding(new Insets(20));
+        content.setPadding(new Insets(30, 40, 30, 40));
         content.getChildren().addAll(dialogPane(), buttonPane());
         Scene scene = new Scene(content);
         initModality(Modality.APPLICATION_MODAL);
-        setResizable(false);
+        // setResizable(false);
         setScene(scene);
         setTitle("Neue Trainingseinheit");
     }
@@ -64,15 +64,28 @@ public class EditorDialog extends Stage {
     }
 
     private Pane buttonPane() {
-        HBox boxButton = new HBox(10);
+        HBox boxButton = new HBox(20);
         boxButton.setAlignment(Pos.CENTER_RIGHT);
 
         btnAdd = new Button("Hinzufügen");
+        btnAdd.setOnAction(e -> addTraining());
         btnCancel = new Button("Abbrechen");
         btnCancel.setOnAction(e -> close());
         boxButton.getChildren().addAll(btnAdd, btnCancel);
 
         return boxButton;
+    }
+
+    private void addTraining() {
+        String message = new String();
+
+        if (txtMarker.getText().trim().isEmpty()) {
+            System.out.println("Marker ist leer");
+        }
+    }
+
+    public void setPresenter(Presenter presenter) {
+        this.presenter = presenter;
     }
 
 }

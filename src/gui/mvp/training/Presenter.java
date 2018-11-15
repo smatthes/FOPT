@@ -1,6 +1,5 @@
 package gui.mvp.training;
 
-import java.util.Objects;
 import java.util.Optional;
 
 import javafx.scene.control.Dialog;
@@ -20,12 +19,7 @@ public class Presenter {
     }
 
     public void init() {
-        updateListView();
-    }
-
-    private void updateListView() {
-        view.listViewItems().clear();
-        view.listViewItems().addAll(model.getAllTrainingsUnits());
+        view.listViewItemsProperty().bind(model.trainingsListProperty());
     }
 
     public void trainingSelected() {
@@ -36,12 +30,8 @@ public class Presenter {
     }
 
     public void deleteTraining() {
-        TrainingUnit training = view.getSelectedItem();
-        if (Objects.nonNull(training)) {
-            model.removeTrainingUnit(training.getMarker());
-            updateListView();
-            view.clearLabels();
-        }
+        model.removeTrainingUnit(view.getSelectedItem().getMarker());
+        view.clearLabels();
     }
 
     public void addTraining() {
@@ -49,7 +39,6 @@ public class Presenter {
         Optional<TrainingUnit> result = dialog.showAndWait();
         if (result.isPresent()) {
             model.addTrainingUnit(result.get());
-            updateListView();
         }
     }
 

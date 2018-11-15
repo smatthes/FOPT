@@ -1,5 +1,6 @@
 package gui.mvp.training;
 
+import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -9,7 +10,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 public class View {
 
@@ -82,7 +82,8 @@ public class View {
     }
 
     private void showAddTrainingDialog() {
-        Stage addDialog = new EditorDialog();
+        EditorDialog addDialog = new EditorDialog();
+        addDialog.setPresenter(presenter);
         addDialog.showAndWait();
     }
 
@@ -96,6 +97,10 @@ public class View {
 
     public ObservableList<TrainingUnit> listViewItems() {
         return listView.getItems();
+    }
+
+    public ObjectProperty<ObservableList<TrainingUnit>> listViewItemsProperty() {
+        return listView.itemsProperty();
     }
 
     public TrainingUnit getSelectedItem() {
