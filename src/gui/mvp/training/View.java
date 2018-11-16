@@ -1,5 +1,7 @@
 package gui.mvp.training;
 
+import java.util.Objects;
+
 import javafx.beans.property.ObjectProperty;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
@@ -59,18 +61,22 @@ public class View {
 
         HBox boxMarker = new HBox(10);
         lblMarker = new Label();
+        lblMarker.setId("markerLabel");
         boxMarker.getChildren().addAll(new Label("Kennung:"), lblMarker);
 
         HBox boxDistance = new HBox(10);
         lblDistance = new Label();
+        lblDistance.setId("distanceLabel");
         boxDistance.getChildren().addAll(new Label("Entfernung [km]:"), lblDistance);
 
         HBox boxTime = new HBox(10);
         lblTime = new Label();
+        lblTime.setId("timeLabel");
         boxTime.getChildren().addAll(new Label("Zeit [Minuten]:"), lblTime);
 
         HBox boxMeanSpeed = new HBox(10);
         lblMeanSpeed = new Label();
+        lblMeanSpeed.setId("meanSpeedLabel");
         lblMeanSpeed.setPrefWidth(40);
         boxMeanSpeed.getChildren().addAll(new Label("Durchschnittsgeschwindigkeit [km/h]:"), lblMeanSpeed);
 
@@ -82,9 +88,11 @@ public class View {
     }
 
     private void showAddTrainingDialog() {
-        EditorDialog addDialog = new EditorDialog();
-        addDialog.setPresenter(presenter);
-        addDialog.showAndWait();
+        TrainingUnit training = (new EditorDialog()).showDialog();
+        
+        if(Objects.nonNull(training)) {
+            System.out.println("Neues Training " + training.getMarker());
+        }
     }
 
     private void listViewSelectEvent() {

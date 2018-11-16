@@ -20,13 +20,15 @@ public class Model {
         markerList = new ArrayList<>();
     }
 
-    public void addTrainingUnit(TrainingUnit unit) {
-        String newMarker = unit.getMarker().trim();
+    public void addTrainingUnit(TrainingUnit training) {
+        String newMarker = training.getMarker().trim();
         if (markerList.contains(newMarker)) {
             throw new IllegalArgumentException("Es existiert bereits ein Eintrag mit dem Marker " + newMarker);
         }
 
-        addTraining(unit);
+        if (markerList.add(training.getMarker())) {
+            trainingsList.add(training);
+        }
     }
 
     public void removeTrainingUnit(String kennung) {
@@ -65,16 +67,13 @@ public class Model {
         return markerList.toArray(markers);
     }
 
-    private void addTraining(TrainingUnit training) {
-        if (markerList.add(training.getMarker())) {
-            trainingsList.add(training);
-        }
-    }
-
     private void removeTraining(TrainingUnit training) {
         trainingsList.remove(training);
     }
 
+    /**
+     *  Fügt einige Beispieldaten ein
+     */
     public void addSampleData() {
         addTrainingUnit(new TrainingUnit("Lauf am Montag", 3, 32));
         addTrainingUnit(new TrainingUnit("Lauf am Dienstag", 3, 35));
