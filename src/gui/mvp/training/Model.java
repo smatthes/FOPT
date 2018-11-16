@@ -18,7 +18,6 @@ public class Model {
     public Model() {
         trainingsList = new SimpleListProperty<>(FXCollections.observableArrayList());
         markerList = new ArrayList<>();
-        addSampleData();
     }
 
     public void addTrainingUnit(TrainingUnit unit) {
@@ -76,7 +75,7 @@ public class Model {
         trainingsList.remove(training);
     }
 
-    private void addSampleData() {
+    public void addSampleData() {
         addTrainingUnit(new TrainingUnit("Lauf am Montag", 3, 32));
         addTrainingUnit(new TrainingUnit("Lauf am Dienstag", 3, 35));
         addTrainingUnit(new TrainingUnit("Lauf am Mittwoch", 2, 14));

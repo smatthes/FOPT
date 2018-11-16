@@ -9,6 +9,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) {
         Model model = new Model();
+        model.addSampleData();
         Presenter presenter = new Presenter();
         View view = new View(presenter);
         presenter.setModel(model);
