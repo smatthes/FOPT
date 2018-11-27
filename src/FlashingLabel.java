@@ -53,11 +53,11 @@ public class FlashingLabel extends Label {
         if (delay == null) {
             delay = new SimpleLongProperty(500L);
         }
-        blinker = new Thread(() -> blinker());
+        blinker = new Thread(() -> flashing());
         blinker.start();
     }
 
-    private void blinker() {
+    private void flashing() {
         while (!blinker.isInterrupted()) {
             Platform.runLater(() -> {
                 setVisible(!isVisible());
@@ -83,7 +83,7 @@ public class FlashingLabel extends Label {
         return delay;
     }
 
-    public void stopBlinking() {
+    public void stopFlashing() {
         if (!Thread.interrupted()) {
             blinker.interrupt();
         }
