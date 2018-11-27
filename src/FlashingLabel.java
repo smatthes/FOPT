@@ -17,6 +17,10 @@ public class FlashingLabel extends Label {
 
     public FlashingLabel(Long delay) {
         this();
+
+        if (delay > 0) {
+            this.delay.set(delay);
+        }
     }
 
     public FlashingLabel(String text) {
@@ -37,6 +41,14 @@ public class FlashingLabel extends Label {
         initialize();
     }
 
+    public FlashingLabel(String text, Node graphic, Long delay) {
+        this(text, graphic);
+
+        if (delay > 0) {
+            this.delay.set(delay);
+        }
+    }
+
     private void initialize() {
         if (delay == null) {
             delay = new SimpleLongProperty(500L);
@@ -48,17 +60,7 @@ public class FlashingLabel extends Label {
     private void blinker() {
         while (!blinker.isInterrupted()) {
             Platform.runLater(() -> {
-                setVisible(true);
-            });
-
-            try {
-                Thread.sleep(delay.get());
-            } catch (InterruptedException ex) {
-                blinker.interrupt();
-            }
-
-            Platform.runLater(() -> {
-                setVisible(false);
+                setVisible(!isVisible());
             });
 
             try {
