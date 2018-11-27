@@ -3,3 +3,6 @@
 .project
 .settings/
 /.checkstyle
+/nbproject/private/
+/build/
+/dist/

@@ -3,7 +3,7 @@ import javafx.beans.property.LongProperty;
 
 class LongToStringBinding extends StringBinding {
 
-    private LongProperty property;
+    private final LongProperty property;
 
     public LongToStringBinding(LongProperty property) {
         bind(property);

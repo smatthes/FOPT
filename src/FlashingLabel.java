@@ -87,6 +87,8 @@ public class FlashingLabel extends Label {
         if (!Thread.interrupted()) {
             blinker.interrupt();
         }
+
+        setVisible(true);
     }
 
 }
