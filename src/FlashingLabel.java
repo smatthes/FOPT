@@ -8,7 +8,7 @@ public class FlashingLabel extends Label {
 
     private LongProperty delay;
 
-    private Thread blinker;
+    private Thread flasher;
 
     public FlashingLabel() {
         super();
@@ -17,10 +17,7 @@ public class FlashingLabel extends Label {
 
     public FlashingLabel(Long delay) {
         this();
-
-        if (delay > 0) {
-            this.delay.set(delay);
-        }
+        setDelay(delay);
     }
 
     public FlashingLabel(String text) {
@@ -30,10 +27,7 @@ public class FlashingLabel extends Label {
 
     public FlashingLabel(String text, Long delay) {
         this(text);
-
-        if (delay > 0) {
-            this.delay.set(delay);
-        }
+        setDelay(delay);
     }
 
     public FlashingLabel(String text, Node graphic) {
@@ -43,22 +37,20 @@ public class FlashingLabel extends Label {
 
     public FlashingLabel(String text, Node graphic, Long delay) {
         this(text, graphic);
-
-        if (delay > 0) {
-            this.delay.set(delay);
-        }
+        setDelay(delay);
     }
 
     private void initialize() {
         if (delay == null) {
             delay = new SimpleLongProperty(500L);
         }
-        blinker = new Thread(() -> flashing());
-        blinker.start();
+        flasher = new Thread(() -> flashing());
+        flasher.setDaemon(true);
+        flasher.start();
     }
 
     private void flashing() {
-        while (!blinker.isInterrupted()) {
+        while (!flasher.isInterrupted()) {
             Platform.runLater(() -> {
                 setVisible(!isVisible());
             });
@@ -66,7 +58,7 @@ public class FlashingLabel extends Label {
             try {
                 Thread.sleep(delay.get());
             } catch (InterruptedException ex) {
-                blinker.interrupt();
+                flasher.interrupt();
             }
         }
     }
@@ -76,7 +68,9 @@ public class FlashingLabel extends Label {
     }
 
     public void setDelay(long delay) {
-        this.delay.set(delay);
+        if (delay > 0) {
+            this.delay.set(delay);
+        }
     }
 
     public LongProperty delayProperty() {
@@ -85,7 +79,7 @@ public class FlashingLabel extends Label {
 
     public void stopFlashing() {
         if (!Thread.interrupted()) {
-            blinker.interrupt();
+            flasher.interrupt();
         }
 
         setVisible(true);

@@ -1,3 +1,4 @@
+import java.text.NumberFormat;
 import java.util.Date;
 
 import javafx.application.Application;
@@ -46,9 +47,12 @@ public class Main extends Application {
         slider.setMajorTickUnit(250);
         slider.setMinorTickCount(4);
         slider.setSnapToTicks(true);
+        slider.setBlockIncrement(50);
         pane.getChildren().add(slider);
         label.delayProperty().bind(slider.valueProperty());
-        lblDelay.textProperty().bind(new LongToStringBinding(label.delayProperty()));
+        // lblDelay.textProperty().bind(new
+        // LongToStringBinding(label.delayProperty()));
+        lblDelay.textProperty().bindBidirectional(label.delayProperty(), NumberFormat.getInstance());
 
         Scene scene = new Scene(pane);
         primaryStage.setScene(scene);
@@ -56,9 +60,6 @@ public class Main extends Application {
         primaryStage.setWidth(600);
         primaryStage.setResizable(false);
         primaryStage.show();
-        primaryStage.setOnCloseRequest(event -> {
-            label.stopBlinking();
-        });
     }
 
     public static void main(String[] args) {
