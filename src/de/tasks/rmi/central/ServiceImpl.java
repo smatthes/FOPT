@@ -17,25 +17,25 @@ public class ServiceImpl extends UnicastRemoteObject implements Service {
     }
 
     @Override
-    public Data open() {
+    public Data open() throws RemoteException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Data get() {
+    public Data get() throws RemoteException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public Data close() {
+    public Data close() throws RemoteException {
         // TODO Auto-generated method stub
         return null;
     }
 
     @Override
-    public boolean isOpen() {
+    public boolean isOpen() throws RemoteException {
         // TODO Auto-generated method stub
         return false;
     }

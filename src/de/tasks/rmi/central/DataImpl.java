@@ -18,12 +18,12 @@ public class DataImpl extends UnicastRemoteObject implements Data {
     }
 
     @Override
-    public void append(String s) {
+    public void append(String s) throws RemoteException {
         data.add(s);
     }
 
     @Override
-    public ArrayList<String> getValues() {
+    public ArrayList<String> getValues() throws RemoteException {
         return data;
     }
 

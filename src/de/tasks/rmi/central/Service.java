@@ -1,15 +1,16 @@
 package de.tasks.rmi.central;
 
 import java.rmi.Remote;
+import java.rmi.RemoteException;
 
 public interface Service extends Remote {
 
-    public Data open();
+    public Data open() throws RemoteException;
 
-    public Data get();
+    public Data get() throws RemoteException;
 
-    public Data close();
+    public Data close() throws RemoteException;
 
-    public boolean isOpen();
+    public boolean isOpen() throws RemoteException;
 
 }
