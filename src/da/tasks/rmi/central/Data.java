@@ -1,10 +1,11 @@
-package de.tasks.rmi.central;
+package da.tasks.rmi.central;
 
+import java.io.Serializable;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 
-public interface Data extends Remote {
+public interface Data extends Remote, Serializable {
 
     public void append(String s) throws RemoteException;
 
